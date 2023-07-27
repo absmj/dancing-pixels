@@ -1,0 +1,38 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	color: aliceblue;
+	--heading: rgb(159, 12, 189);
+}
+
+html, body {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	background-color: rgb(20, 20, 20);
+}
+
+.color-pink {
+	background-color: var(--heading);
+}
+
+.panel {
+	overflow-y: auto;
+	border-radius: .89em;
+	border: .189em dashed var(--heading);
+	background-color: rgb(34, 34, 34);
+	box-shadow: 2px 2px 20px rgba(143, 143, 143, 0.178);
+}
+
+#app {
+	width: inherit;
+	height: inherit;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+h4 {
+	color: var(--heading);
+}

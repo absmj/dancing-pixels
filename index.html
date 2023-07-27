@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImageWarper</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/libraries/p5.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="row">
+                <!-- Left panel -->
+                <div id="left-panel" class="d-none d-lg-block col-3">
+                    <div id="s1"></div>
+                    <div id="s2" class="mt-4"></div>
+                    <div id="s3" class="mt-4"></div>
+                    <div id="s4" class="mt-4"></div>
+
+                </div>
+    
+                <!-- Main panel -->
+                <div id="main-panel" class="col-12 offset-md-1 col-md-10 offset-lg-0 col-lg-9 panel"></div>
+    
+
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./js/libraries/p5.sound.min.js"></script>
+<script type="text/javascript" src="./js/helpers/index.js"></script> 
+<script type="text/javascript" src="./js/warper/matrix22.js"></script> 
+<script type="text/javascript" src="./js/warper/interpolation.js"></script>  
+<script type="text/javascript" src="./js/warper/point.js"></script>
+<script type="text/javascript" src="./js/warper/deformation.js"></script>  
+<script type="text/javascript" src="./js/warper/point_definer.js"></script> 
+<script type="text/javascript" src="./js/processing/audio/audio.js"></script> 
+
+<script type="text/javascript" src="./js/store.js"></script>
+<script type="text/javascript" src="./js/views/stageOne.js"></script>
+<script type="text/javascript" src="./js/views/stageTwo.js"></script>
+<script type="text/javascript" src="./js/views/stageThree.js"></script>
+<script type="text/javascript" src="./js/views/stageFour.js"></script>
+<script type="text/javascript" src="./js/views/leftPanel.js"></script>
+<script type="text/javascript" src="./js/views/rightPanel.js"></script>
+<script type="text/javascript" src="./js/views/index.js"></script>
+<script type="text/javascript" src="./js/ui/main.js"></script>
+
+<script>
+        // const file = document.getElementById("file");
+    // const btnUpload = document.getElementById("upload-btn")
+
+    // document.addEventListener("DOMContentLoaded", () => {
+    //     store.canvas = document.querySelector("canvas");
+    // })
+
+    // let button, sound, fft, max=80,min=20;
+    // let easing = 0.1;
+    // let x = 1;
+    // let y = 1;
+    // function togglePlay() {
+    //     if(!sound.isPlaying()) {
+    //         sound.play()
+    //     } else {
+    //         sound.pause();
+    //     }
+    // }
+
+    // function preload() {
+    //     sound = loadSound("title.mp3")
+    // }
+
+    // function setup() {
+    //     noCanvas();
+    //     button = createButton("Play")
+    //     button.class("btn btn-primary")
+    //     button.mouseClicked(togglePlay);
+    //     sound.play();
+    //     fft = new p5.FFT(0.9, 128);
+    //     frameRate(12)
+    //     const t = document.getElementById("test")
+    //     document.getElementById("tb").addEventListener("mousemove", (e) => {
+    //         t.style.left = e.clientX + "px"
+    //         console.log(e.clientX)
+    //     })
+    // }
+
+    // function draw() {
+    //     with(store.state) {
+    //         if(!selectedPoint) return;
+    //         let spectrum = fft.analyze();
+
+    //         const el = document.getElementById("tb")
+                
+    //         let clientX = (spectrum[Math.floor(Math.random() * (max - min) + min)]) - canvas.offsetLeft;
+    //         let clientY = (spectrum[Math.floor(Math.random() * (max - min) + min)]) - canvas.offsetTop;
+    //         // let offsetX = selectedPoint.x;
+    //         // let offsetY = selectedPoint.y;
+            
+    //         for(let i in warper.oriPoints) {
+    //             if(clientX > warper.oriPoints[i].x || clientY > warper.oriPoints[i].y || clientX <= 0 || clientY <= 0 ) {
+    //                 if(clientX > warper.oriPoints[i].x || clientX <= 0) {
+    //                     clientX = Math.abs(warper.oriPoints[i].x - (clientX - warper.oriPoints[i].x));
+    //                 }
+    
+    //                 if(clientY > warper.oriPoints[i].y || clientY <= 0) {
+    //                     clientY = Math.abs(warper.oriPoints[i].y - (clientY - warper.oriPoints[i].y));
+    //                 }
+
+    //                 break;
+    //             }
+    //         }
+
+
+
+    //         clientX = random() > 0.5 ? clientX / 10 : selectedPoint.x - clientX / 5;
+    //         clientY = random() > 0.5 ? selectedPoint.y + clientY / 10 : selectedPoint.y - clientY / 10;
+
+    //         // clientX = selectedPoint.x - canvas.offsetLeft;
+    //         // console.log(selectedPoint.x, canvas.offsetLeft)
+    //             // const click = new MouseEvent("mousedown", {
+    //             //     clientX,
+    //             //     clientY,
+    //             // });
+    //             // const up = new MouseEvent("mouseup")
+            
+    //         let targetX = clientX;
+    //         let dx = targetX - x;
+    //         x += dx * easing;
+
+    //         let targetY = clientY;
+    //         let dy = targetY - y;
+    //         y += dy * easing;
+    //         if(typeof x == "number" && typeof y == "number") {
+    //             const evt = new MouseEvent("mousemove", {
+    //                 clientX: x,
+    //                 clientY: y,
+    //                 bubbles: true,
+    //                 cancelable: false,
+    //                 view: window
+    //             })
+    //             // warper.canvas.dispatchEvent(click); 
+    //             warper.canvas.dispatchEvent(evt); 
+            
+    //             warper.redraw();
+    //             // noLoop()
+    //         }
+    //         // redraw();
+    //     }
+    // }
+    
+
+</script>
+</html>
