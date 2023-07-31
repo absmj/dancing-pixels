@@ -17,6 +17,7 @@ html, body {
 	background-color: var(--heading);
 }
 
+
 .panel {
 	overflow-y: auto;
 	border-radius: .89em;
@@ -24,6 +25,27 @@ html, body {
 	background-color: rgb(34, 34, 34);
 	box-shadow: 2px 2px 20px rgba(143, 143, 143, 0.178);
 }
+
+.sidebar {
+	max-height: calc(100vh - 8em);
+	overflow-y: auto;
+	position: relative;
+}
+
+@media only screen and (max-width: 991px) {
+	.sidebar {
+	  padding: 1.15em;
+	  border-radius: 1.25em;
+	  position: absolute;
+	  height: 400px;
+	  width: 350px;
+	  left: calc((100vw - 350px) / 2);
+	  top: calc((100vh - 400px) / 2);
+	  overflow-y: auto;
+	  background-color: rgb(63, 63, 63);
+	  z-index: 1033;
+	}
+  }
 
 #app {
 	width: inherit;
@@ -33,6 +55,80 @@ html, body {
 	align-items: center;
 }
 
+#close {
+	font-size: 1.25em;
+	cursor: pointer;
+	color: white;
+	position: absolute;
+	z-index: 1036;
+	right: .75em;
+	top: calc((100vh - 180px) / 4.75);
+}
+
 h4 {
 	color: var(--heading);
+}
+
+#result > canvas {
+	transition: transform 0.089s ease-in-out;
+}
+
+#record {
+	position: absolute;
+	width: 1.25em;
+	height: 1.25em;
+	background-color: red;
+	border-radius: 50%;
+	right: 0;
+	top: 0.56em;
+	cursor: pointer;
+	opacity: 0;
+}
+
+.recording {
+	animation: recording 0.56s ease-in infinite alternate-reverse;
+}
+
+.download {
+	opacity: 1!important;
+	border-radius: 0!important;
+	animation: download 0.56s ease-in infinite alternate-reverse;
+}
+
+@keyframes recording {
+	from {
+		opacity: 1;
+		border: .06em solid rgba(255, 50, 50, 0.712);
+		box-shadow: 0px 0px 20px rgba(255, 50, 50, 0.712);
+	} to {
+		opacity: 0;
+		border: none;
+		box-shadow: none;
+	}	
+}
+
+@keyframes download {
+	from {
+		background-color: transparent;
+		border: .06em solid rgba(255, 255, 255, 0.712);
+		box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.918);
+		
+	} to {
+		background-color: white;
+		border: none;
+		box-shadow: none;
+	}	
+}
+
+.backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+	transition: all .85s ease;
+	z-index: 1031;
+
 }

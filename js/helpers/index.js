@@ -26,13 +26,12 @@ function findOptimalCoordinates(coordinates, selecting, calculated) {
     let {x, y} = calculated
     coordinates = getMinMaxCoordinates(coordinates)
 
-
     if(coordinates.maxX < x) {
-        x = coordinates.maxX - (coordinates.maxX - x)
+        x += coordinates.maxX - (coordinates.maxX - x)
     }
 
     if(coordinates.maxY < y) {
-        y = coordinates.maxY - (coordinates.maxY - maxY)
+        y += coordinates.maxY - (coordinates.maxY - maxY)
     }
 
     if(coordinates.minX > x) {
@@ -42,11 +41,9 @@ function findOptimalCoordinates(coordinates, selecting, calculated) {
     if(coordinates.minY > y) {
         y = 0
     }
-
-    x *= 8;
-    y *= 8;
-    // x = selecting.x;
-    // y = selecting.y;
+    x = selecting.x + (x / 10);
+    y = selecting.y + (y / 10);
     // console.log({selecting, x, y, calculated, coordinates})
     return {x, y}
 }
+

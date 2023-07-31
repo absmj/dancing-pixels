@@ -4,7 +4,9 @@ class AudioAnalyzer {
     SMOOTHING = 0.7;
     audio = null
     analyser = null;
-
+    context = null
+    aStream = null
+    source = null
 
     constructor(audio, options = null) {
         this.audio = audio
@@ -16,15 +18,17 @@ class AudioAnalyzer {
 
 
     analyzing() {
-        var context = new AudioContext();
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-        this.analyser = context.createAnalyser();
+        this.context = new AudioContext();
+
+        this.analyser = this.context.createAnalyser();
         this.analyser.fftSize = this.FFT_SIZE;
         this.analyser.smoothingTimeConstant = this.SMOOTHING;
 
-        var source = context.createMediaElementSource(this.audio);
-        source.connect(this.analyser);
-        this.analyser.connect(context.destination);
+        this.source = this.context.createMediaElementSource(this.audio);
+        this.source.connect(this.analyser);
+        this.analyser.connect(this.context.destination);
     }
 
     getFrame() {
@@ -39,6 +43,22 @@ class AudioAnalyzer {
 
         return rawFreq;
 
+    }
+
+    initAudioStream() {
+        // create a stream from our AudioContext
+        var dest = this.context.createMediaStreamDestination();
+        this.aStream = dest.stream;
+        this.source.connect(dest)
+        this.audio.play();
+              
+      }
+
+    createWaveForm() {
+        var rawFreq = new Uint8Array(this.analyser.frequencyBinCount);
+        this.analyser.getByteFrequencyData(rawFreq);
+
+        return rawFreq
     }
 
     peak(data) {

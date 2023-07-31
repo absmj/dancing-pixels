@@ -3,13 +3,19 @@ var ImgWarper = ImgWarper || {};
 ImgWarper.PointDefiner = function(canvas, image, imgData) {
   this.oriPoints = new Array();
   this.dstPoints = new Array();
-  this.selectedPoint = null;
+
   //set up points for change; 
   var c = canvas;
   this.canvas = canvas;
   var that = this;
   this.dragging_ = false;
   this.computing_ = false;
+  this.selectedPoint = null;
+
+  // $(c).unbind();
+  // $(c).bind('mousedown', function (e) { that.touchStart(e); });
+  // $(c).bind('mousemove', function (e) { that.touchDrag(e); });
+  // $(c).bind('mouseup', function (e) { that.touchEnd(e); });
   this.currentPointIndex = -1;
   this.imgWarper = new ImgWarper.Warper(c, image, imgData);
 };
@@ -19,16 +25,17 @@ ImgWarper.PointDefiner.prototype.touchEnd = function(event) {
 }
 
 ImgWarper.PointDefiner.prototype.touchDrag = function(e) {
-  if ((this.computing_ || !this.dragging_ || this.currentPointIndex < 0)) {
+  if (this.computing_ || !this.dragging_ || this.currentPointIndex < 0) {
     return;
   }
   this.computing_ = true;
   e.preventDefault();
-  var endX = Math.abs(e.offsetX || e.clientX - e.target.offsetLeft);
-  var endY = Math.abs(e.offsetY || e.clientY - e.target.offsetTop);
-  const q = new ImgWarper.Point(endX, endY)
-  this.dstPoints[this.currentPointIndex] = q;
-  // this.redraw();
+  var endX = (e.offsetX || e.clientX - e.target.offsetLeft);
+  var endY = (e.offsetY || e.clientY - e.target.offsetTop);
+
+  movedPoint = new ImgWarper.Point(endX, endY);
+  this.dstPoints[this.currentPointIndex] = new ImgWarper.Point(endX, endY);
+  this.redraw();
   this.computing_ = false;
 };
 
@@ -40,66 +47,67 @@ ImgWarper.PointDefiner.prototype.redraw = function () {
     return;
   }
   this.imgWarper.warp(this.oriPoints, this.dstPoints);
-  if (true) {
+  // if (document.getElementById('show-control').checked) {
     this.redrawCanvas();
-  }
+  // }
 };
 
-3
+
 ImgWarper.PointDefiner.prototype.touchStart = function(e) {
   this.dragging_ = true;
   e.preventDefault();
   var startX = (e.offsetX || e.clientX - e.target.offsetLeft);
   var startY = (e.offsetY || e.clientY - e.target.offsetTop);
   var q = new ImgWarper.Point(startX, startY);
-  // this.oriPoints.push(q);
-  // this.dstPoints.push(q);
-  if (e.ctrlKey) {
+  var pointIndex = this.getCurrentPointIndex(q);
+  if (pointIndex == -1) {
     this.oriPoints.push(q);
     this.dstPoints.push(q);
-  } else if (e.shiftKey) {
-    var pointIndex = this.getCurrentPointIndex(q);  
-    if (pointIndex >= 0) {
-      this.oriPoints.splice(pointIndex, 1);
-      this.dstPoints.splice(pointIndex, 1);
-    }
-  } else if(e.cancelable) {
-    this.selectedPoint = q
-    this.currentPointIndex = this.getCurrentPointIndex(q);  
   }
+
   this.redraw();
+
   return q;
 };
 
-ImgWarper.PointDefiner.prototype.getCurrentPointIndex = function(q) {
-  var currentPoint = -1;   
+ImgWarper.PointDefiner.prototype.selectPoint = function(e) {
+  e.preventDefault();
+  var startX = (e.offsetX || e.clientX - $(e.target).offset().left);
+  var startY = (e.offsetY || e.clientY - $(e.target).offset().top);
+  var q = new ImgWarper.Point(startX, startY);
+  var pointIndex = this.getCurrentPointIndex(q);
+  this.currentPointIndex = pointIndex;
+  if(pointIndex >= 0) {
+    this.selectedPoint = q;
+  }
+  this.redraw();
+  return pointIndex;
+};
 
+ImgWarper.PointDefiner.prototype.getCurrentPointIndex = function(q) {
   for (var i = 0 ; i< this.dstPoints.length; i++){
     if (this.dstPoints[i].InfintyNormDistanceTo(q) <= 20) {
-      currentPoint = i;
       return i;
     }
   }
-  return currentPoint;
+  return -1;
 };
 
 ImgWarper.PointDefiner.prototype.redrawCanvas = function(points) {
-  points = points || this.dstPoints;
-  // console.log(points)
   var ctx = this.canvas.getContext("2d");
   for (var i = 0; i < this.oriPoints.length; i++){
-    if (i < points.length) {
+    if (i < this.dstPoints.length) {
       if (i == this.currentPointIndex) {
-        this.drawOnePoint(points[i], ctx, 'orange');
+        this.drawOnePoint(this.dstPoints[i], ctx, 'orange');
       } else {
-        this.drawOnePoint(points[i], ctx, '#6373CF');
+        this.drawOnePoint(this.dstPoints[i], ctx, '#6373CF');
       }
 
       ctx.beginPath();
       ctx.lineWidth = 3;
       ctx.moveTo(this.oriPoints[i].x, this.oriPoints[i].y);
-      ctx.lineTo(points[i].x, points[i].y);
-      // ctx.strokeStyle = '#691C50';
+      ctx.lineTo(this.dstPoints[i].x, this.dstPoints[i].y);
+      //ctx.strokeStyle = '#691C50';
       ctx.stroke();
     } else {
       this.drawOnePoint(this.oriPoints[i], ctx, '#119a21');
@@ -109,7 +117,7 @@ ImgWarper.PointDefiner.prototype.redrawCanvas = function(points) {
 };
 
 ImgWarper.PointDefiner.prototype.drawOnePoint = function(point, ctx, color) {
-  var radius = 10; 
+  var radius = 10;
   ctx.beginPath();
   ctx.lineWidth = 3;
   ctx.arc(parseInt(point.x), parseInt(point.y), radius, 0, 2 * Math.PI, false);

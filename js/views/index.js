@@ -3,32 +3,33 @@ const views = {
         {
             id: 1,
             stage: 1,
-            view: data => stageOne(data)
+            ...stageOne
         },
     
         {
             id: 2,
             stage: 2,
-            view: data => stageTwo(data)
+            ...stageTwo,
+
         },
     
         {
             id: 3,
             stage: 3,
-            view: data => stageThree(data)
+            ...stageThree
         },
     
         {
             id: 4,
             stage: 4,
-            view: data => stageFour(data)
+            ...stageFour
         }
     ],
 
     panels: [
         {
             id: 1,
-            view: () => leftPanel()
+            view: (stage = null) => leftPanel(stage)
         },
         {
             id: 2,

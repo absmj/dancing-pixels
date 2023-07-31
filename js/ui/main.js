@@ -1,28 +1,8 @@
 const app = {
     el: "app",
     methods: {
-        generationTable() {
-            app.el.innerHTML = `
-                <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    ${store.state.stage.list.map(l => 
-                        `<button class="nav-link${store.state.stage.current == l.id ? ' active' : ''}" id="v-pills-${l.id}-tab" data-bs-toggle="pill" data-bs-target="#v-pills-${l.id}" type="button" role="tab" aria-controls="v-pills-${l.id}" aria-selected="true">
-                            ${store.state.languages[store.state.lang][l.title]}
-                        </button>`
-                    ).join("")}
-                </div>
-                <div class="tab-content" id="v-pills-tabContent">
-                    ${store.state.stage.list.map(l => 
-                        `<div class="row tab-pane${store.state.stage.current == l.id ? ' active show' : ''}" id="v-pills-${l.id}" role="tabpanel" tabindex="0">                        
-                            ${store.state.stage.view(l)}
-                        </div>`
-                    ).join("")}
-                </div>
-                
-            `
-        },
-
         mainPanel() {
-            document.getElementById("main-panel").innerHTML = store.state.stage.view()
+            document.getElementById("main-panel").innerHTML = store.state.stage.currentStage.view()
             return this;
         },
 
@@ -33,16 +13,50 @@ const app = {
     },
 
 
+    created() {
+        var url_string = window.location.href; 
+        var url = new URL(url_string);
+        var lang = url.hash.substring(1);
+        store.views = views;
+        store.lang = lang || 'az'
+    },
+
 
     mounted() {
-        store.views = views;
-        this.el = document.getElementById(this.el)
+
+        const sidebar = document.querySelector(".sidebar")
+        const backdrop = document.querySelector(".backdrop")
+        document.getElementById("close").addEventListener("click", () => {
+            backdrop.classList.add("d-none")
+            sidebar.classList.remove("d-block")
+            sidebar.classList.add("d-none")
+        })
+
+        document.getElementById("toggler")?.addEventListener("click", () => {
+            sidebar.classList.add("d-block")
+            sidebar.classList.remove("d-none")
+            backdrop.classList.remove("d-none")
+        })
+
+        document.querySelectorAll(".language")?.forEach(l => {
+            l.addEventListener("click", (e) => {
+                store.lang = e.target.dataset.lang
+            })
+        })
+
         this.methods.leftPanel().mainPanel();
-        store.state.stage.currentStage.mount();
-        // this.methods.generationTable()
+        store.state.stage.currentStage.state.mount();
     },
 
 }
+
+document.onreadystatechange = function(e)
+{
+    if (document.readyState === 'complete')
+    {
+        app.created();
+    }
+};
 
 window.onload = () => {
     app.mounted()

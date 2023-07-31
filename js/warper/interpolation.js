@@ -46,10 +46,10 @@ ImgWarper.BilinearInterpolation.prototype.fill =
       index = ((j * this.width) + i) * 4;
       if (srcX < 0 || srcX > this.width - 1 ||
           srcY < 0 || srcY > this.height - 1) {
-        this.imgTargetData.data[index] = 0;
-        this.imgTargetData.data[index + 1] = 0;
-        this.imgTargetData.data[index + 2] = 0;
-        this.imgTargetData.data[index + 3] = 0;
+        this.imgTargetData.data[index] = 20;
+        this.imgTargetData.data[index + 1] = 20;
+        this.imgTargetData.data[index + 2] = 20;
+        this.imgTargetData.data[index + 3] = 20;
         continue;
       }
       var srcX1 = Math.floor(srcX);
