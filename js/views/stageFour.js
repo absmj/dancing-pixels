@@ -1,6 +1,6 @@
 const max = 128, min = 0;
 let mediaRecorder;
-let easing = 0.75, xE = 1, yE = 1;
+let easing = 1, xE = 1, yE = 1;
 
 const stageFour = {
     view() {
@@ -8,7 +8,7 @@ const stageFour = {
         <div id="stage-4" class="p-2">
             <div class="head position-relative">
                 <h4 id="head">${store.state.languages[store.state.lang][34].heading}</h4>
-                <div  id="record"></div>
+                <div  id="record" class="d-none"></div>
                 <p id="desc" class="text-white">${store.state.languages[store.state.lang][34].desc}</p>
             </div>
             <div class="d-flex justify-content-center" id="result">
@@ -24,7 +24,7 @@ const stageFour = {
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"></h5>
+                        <h5 id="modal-title-download" class="modal-title"></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex justify-content-center">
@@ -36,7 +36,7 @@ const stageFour = {
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
             `
     },
 
@@ -48,16 +48,16 @@ const stageFour = {
             let clientY = (frames[Math.floor(Math.random() * (max - min) + min)]);
             let { x, y } = findOptimalCoordinates(store.state.warper.oriPoints, store.state.warper.selectedPoint,
                 { x: clientX, y: clientY });
-            let targetX = x;
-            let dx = targetX - xE;
-            xE += dx * easing;
+            // let targetX = x;
+            // let dx = targetX - xE;
+            // xE += dx * easing;
 
-            let targetY = y;
-            let dy = targetY - yE;
-            yE += dy * easing;
+            // let targetY = y;
+            // let dy = targetY - yE;
+            // yE += dy * easing;
 
             const dst = store.state.warper.dstPoints;
-            const p = new ImgWarper.Point(xE, yE)
+            const p = new ImgWarper.Point(x, y)
 
             dst[store.state.selectedPoint] = p;
             store.state.warper.dstPoints[store.state.warper.currentPointIndex] = p;
@@ -74,7 +74,8 @@ const stageFour = {
                 fileContent.onload = () => {
                     this.render(fileContent.result, audioData => {
                         document.getElementById(`s4`).innerHTML = store.state.stage.panel(1, 4)
-                        document.getElementById("record").click();
+                        document.getElementById("record").classList.remove("d-none")
+                        config.autoRender && document.getElementById("record").click();
                     })
 
                 }
@@ -110,8 +111,6 @@ const stageFour = {
         },
 
         beforeDestroy() {
-            document.getElementById("head").innerHTML = store.state.languages[store.state.lang].rendering
-            document.getElementById("desc").innerHTML = store.state.languages[store.state.lang].renderingDesc
             const button = document.getElementById("upload-audio")
             button.id = "resetState-button"
             button.innerHTML = store.state.languages[store.state.lang].resetState
@@ -120,8 +119,11 @@ const stageFour = {
         },
 
         saveCanvasAsVideo(e) {
+            document.getElementById("record").removeEventListener("click", this.saveCanvasAsVideo)
+            document.getElementById("head").innerHTML = store.state.languages[store.state.lang].rendering
+            document.getElementById("desc").innerHTML = store.state.languages[store.state.lang].renderingDesc
+
             fn(e).then(async ({ url, blob }) => {
-                document.getElementById("record").removeEventListener("click", this.saveCanvasAsVideo)
                 const video = document.getElementById("video-result")
                 const download = document.getElementById("download-video")
                 document.getElementById("head").innerHTML = store.state.languages[store.state.lang].rendered
@@ -131,7 +133,7 @@ const stageFour = {
                 e.target.setAttribute("data-bs-toggle", "modal")
                 e.target.setAttribute("data-bs-target", "#resulvideo")
                 const filename = `${store.state.file.image} (dancingpixel).webm`
-                document.querySelector(".modal-title").textContent = filename
+                document.getElementById("modal-title-download").textContent = filename
                 download.href = url
                 download.download = filename;
                 video.src = url
@@ -147,7 +149,7 @@ const stageFour = {
                 return new Promise(function (res, rej) {
 
 
-                    var stream = canvas.captureStream(60);
+                    var stream = canvas.captureStream(config.frameRate);
                     mediaRecorder = new MediaRecorder(stream, {
                         mimeType: "video/webm; codecs=vp9"
                     });

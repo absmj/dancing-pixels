@@ -33,7 +33,7 @@ html, body {
 }
 
 @media only screen and (max-width: 991px) {
-	.sidebar {
+	.sidebar, #right-panel {
 	  padding: 1.15em;
 	  border-radius: 1.25em;
 	  position: absolute;
@@ -82,7 +82,6 @@ h4 {
 	right: 0;
 	top: 0.56em;
 	cursor: pointer;
-	opacity: 0;
 }
 
 .recording {

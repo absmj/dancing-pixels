@@ -10,6 +10,11 @@ const app = {
             document.getElementById("s1").innerHTML = store.state.stage.panel(1)
             return this;
         },
+
+        settings() {
+            document.getElementById("right-panel").innerHTML = settings()
+            return this;
+        },
     },
 
 
@@ -25,16 +30,24 @@ const app = {
     mounted() {
 
         const sidebar = document.querySelector(".sidebar")
+        const rightPanel = document.getElementById("right-panel")
         const backdrop = document.querySelector(".backdrop")
         document.getElementById("close").addEventListener("click", () => {
             backdrop.classList.add("d-none")
             sidebar.classList.remove("d-block")
             sidebar.classList.add("d-none")
+            rightPanel.classList.add("d-none")
         })
 
         document.getElementById("toggler")?.addEventListener("click", () => {
             sidebar.classList.add("d-block")
             sidebar.classList.remove("d-none")
+            backdrop.classList.remove("d-none")
+        })
+
+        document.getElementById("setting-toggle")?.addEventListener("click", () => {
+            rightPanel.classList.add("d-block")
+            rightPanel.classList.remove("d-none")
             backdrop.classList.remove("d-none")
         })
 
@@ -44,7 +57,7 @@ const app = {
             })
         })
 
-        this.methods.leftPanel().mainPanel();
+        this.methods.leftPanel().mainPanel().settings();
         store.state.stage.currentStage.state.mount();
     },
 

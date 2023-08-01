@@ -24,7 +24,12 @@ const languages = {
         rendered: "Render olundu.",
         renderedDesc: "Sağdakı kvadratın üzərinə klikləyərək nəticəylə tanış ola, yükləyə bilərsiniz.",
         renderingDesc: "Formalaşan nəticə video fayla yazılır. Proses sinxron olaraq aparılır.",
-        resetState: "Yenidən"
+        resetState: "Yenidən",
+        settings: "Parametrlər",
+        frameRate: "Kadr tezliyi",
+        autoRender: "Avto render",
+        keyframeSync: "Həssas nöqtələr arasında sinx.",
+        notSelected: "Seçilməyib"
     },
     en: {
         31: {
@@ -51,6 +56,11 @@ const languages = {
         "rendered": "Rendered.",
         "renderedDesc": "Click on the square on the right to preview and download the results.",
         "renderingDesc": "The forming result is being written to a video file. The process is carried out in sync.",
-        "resetState": "Reset"
+        "resetState": "Reset",
+        "settings": "Settings",
+        "frameRate": "Frame rate",
+        "autoRender": "Auto render",
+        "keyframeSync": "Sync. between keyframes",
+        "notSelected": "Not selected"
     }
 }

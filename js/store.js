@@ -120,6 +120,7 @@ const store = {
             for(let i = 1; i <= this.state.stage.current; i++) {
                 document.getElementById(`s${i}`).innerHTML = this.state.stage.panel(1, i)
             }
+            document.getElementById("right-panel").innerHTML = settings()
 
             document.querySelectorAll(`[data-lang]`)?.forEach(e => e.classList.remove("active"))
             document.querySelector(`[data-lang=${l}]`)?.classList.add("active")

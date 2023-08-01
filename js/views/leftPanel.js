@@ -5,7 +5,7 @@ const leftPanel = (stage) => {
                 <div>
                     <h6>${store.state.languages[store.state.lang][31].heading}</h6>
                     <hr>
-                    ${store.state.file.image ? store.state.file.image : '<i>Şəkil seçilməyib</i>'}
+                    ${store.state.file.image ? store.state.file.image : `<i>${store.state.languages[store.state.lang].notSelected}</i>`}
                 </div>
             `;
 
@@ -35,7 +35,7 @@ const leftPanel = (stage) => {
                 <div>
                     <h6>${store.state.languages[store.state.lang][34].heading}</h6>
                     <hr>
-                    ${store.state.audio ? store.state.file.audio : '<i>Musiqi seçilməyib</i>'}
+                    ${store.state.audio ? store.state.file.audio : `<i>${store.state.languages[store.state.lang].notSelected}</i>`}
                 </div>
             `;
     }

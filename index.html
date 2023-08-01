@@ -16,6 +16,7 @@
     <div id="app">
         <nav class="navbar navbar-expand fixed-top navbar-dark bg-dark">
             <div class="container-fluid">
+              <span id="toggler" class="d-lg-none navbar-toggler-icon me-2"></span>
               <a class="navbar-brand" href="#">dancingpixels</a>
               <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav ms-auto">
@@ -26,8 +27,8 @@
                     <a class="nav-link language" data-lang="en" href="#en">EN</a>
                   </li>
                 </ul>
+                <span id="setting-toggle" class="navbar-toggler-icon"></span>
               </div>
-              <span id="toggler" class="d-lg-none navbar-toggler-icon"></span>
             </div>
           </nav>
         <div class="container mt-2">
@@ -46,13 +47,21 @@
                 </div>
     
                 <!-- Main panel -->
-                <div id="main-panel" class="col-12 offset-md-1 col-md-10 offset-lg-0 col-lg-9 panel"></div>
-    
+                <div id="main-panel" class="col-12 offset-md-1 col-md-10 offset-lg-0 col-lg-6 panel"></div>
 
+                <!-- Right panel -->
+                <div id="right-panel" class="d-none d-lg-block col-9 col-lg-3">
+
+                </div>
             </div>
         </div>
     </div>
+
+    <div id="settings-modal"></div>
+
 </body>
+<script type="text/javascript" src="./js/config.js"></script>
+<script type="text/javascript" src="./js/views/settings.js"></script>
 <script type="text/javascript" src="./js/views/stageOne.js"></script>
 <script type="text/javascript" src="./js/views/stageTwo.js"></script>
 <script type="text/javascript" src="./js/views/stageThree.js"></script>
